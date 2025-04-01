@@ -11,8 +11,9 @@ import model.*;
 @WebServlet({ "/project-register", "/projects", "/project-detail"})
 
 public class ProjectServlet extends HttpServlet {
-    public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 
+    //GETリクエスト
+    public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         String path = req.getServletPath(); // アクセスされたURLを取得
         if ("/project-register".equals(path)) {
             req.getRequestDispatcher("project-register.jsp").forward(req, res);
@@ -48,6 +49,7 @@ public class ProjectServlet extends HttpServlet {
         }
     }
 
+    //POSTリクエスト
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         req.setCharacterEncoding("UTF-8");
         String projectName = req.getParameter("project-name");

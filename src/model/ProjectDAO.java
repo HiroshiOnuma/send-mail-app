@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
- * 案件のCRUD処理を担当するクラス
+ * 案件のCRUD処理(登録・参照・更新・削除)を担当するクラス
  * 
  */
 public class ProjectDAO extends BaseDAO {
@@ -18,45 +18,28 @@ public class ProjectDAO extends BaseDAO {
      * @return 登録成功時はProjectオブジェクト、失敗時はnullを返す
      */
     public Project projectInsert(String projectName, String projectDescription) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        String sql = "INSERT INTO projects (project_name, project_description) VALUES (?, ?)";
 
-        try {
-            conn = getConnection();
-            String sql = "INSERT INTO projects (project_name, project_description) VALUES (?, ?)";
+        try (Connection conn = getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) { // 生成されたキーを取得可能にする
 
-            // 生成されたキーを取得可能にする
-            pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, projectName);
             pstmt.setString(2, projectDescription);
             int result = pstmt.executeUpdate();
 
             if (result > 0) {
                 // 自動生成されたキー（project_id）を取得
-                rs = pstmt.getGeneratedKeys();
-                if (rs.next()) {
-                    int projectId = rs.getInt(1);
-                    return new Project(projectId, projectName, projectDescription);
+                try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        int projectId = rs.getInt(1);
+                        return new Project(projectId, projectName, projectDescription);
+                    }
                 }
             }
             return null;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
-        } finally {
-
-            // リソースをクローズ
-            try {
-                if (rs != null)
-                    rs.close();
-                if (pstmt != null)
-                    pstmt.close();
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -69,15 +52,11 @@ public class ProjectDAO extends BaseDAO {
      */
     public List<Project> getProjects() {
         List<Project> projects = new ArrayList<>();
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        String sql = "SELECT project_id, project_name, project_description FROM projects";
 
-        try {
-            conn = getConnection();
-            String sql = "SELECT project_id, project_name, project_description FROM projects";
-            pstmt = conn.prepareStatement(sql);
-            rs = pstmt.executeQuery();
+        try (Connection conn = getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
                 int projectId = rs.getInt("project_id");
@@ -87,21 +66,8 @@ public class ProjectDAO extends BaseDAO {
                 Project project = new Project(projectId, projectName, projectDesc);
                 projects.add(project);
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            // リソースをクローズ
-            try {
-                if (rs != null)
-                    rs.close();
-                if (pstmt != null)
-                    pstmt.close();
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return projects;
     }
