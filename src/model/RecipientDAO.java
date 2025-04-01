@@ -13,50 +13,33 @@ public class RecipientDAO extends BaseDAO {
     /**
      * DBのrecipientsテーブルに配信先を登録するメソッド
      *
-     * @param recipientName        登録する配信先の名前（必須）
+     * @param recipientName  登録する配信先の名前（必須）
      * @param recipientEmail 登録する配信先のメールアドレス（必須）
      * @return 登録成功時はRecipientオブジェクト、失敗時はnullを返す
      */
     public Recipient recipientInsert(String recipientName, String recipientEmail) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        String sql = "INSERT INTO recipients (recipient_name, recipient_email) VALUES (?, ?)";
 
-        try {
-            conn = getConnection();
-            String sql = "INSERT INTO recipients (recipient_name, recipient_email) VALUES (?, ?)";
-
-            // 生成されたキーを取得可能にする
-            pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        try (Connection conn = getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) { // 生成されたキーを取得可能にする
             pstmt.setString(1, recipientName);
             pstmt.setString(2, recipientEmail);
             int result = pstmt.executeUpdate();
 
             if (result > 0) {
                 // 自動生成されたキー（recipient_id）を取得
-                rs = pstmt.getGeneratedKeys();
-                if (rs.next()) {
-                    int recipientId = rs.getInt(1);
-                    return new Recipient(recipientId, recipientName, recipientEmail);
+                try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        int recipientId = rs.getInt(1);
+                        return new Recipient(recipientId, recipientName, recipientEmail);
+                    }
                 }
+
             }
             return null;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
-        } finally {
-
-            // リソースをクローズ
-            try {
-                if (rs != null)
-                    rs.close();
-                if (pstmt != null)
-                    pstmt.close();
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -69,40 +52,22 @@ public class RecipientDAO extends BaseDAO {
      */
     public List<Recipient> getRecipients() {
         List<Recipient> recipients = new ArrayList<>();
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        String sql = "SELECT recipient_id, recipient_name, recipient_email FROM recipients";
 
-        try {
-            conn = getConnection();
-            String sql = "SELECT recipient_id, recipient_name, recipient_email FROM recipients";
-            pstmt = conn.prepareStatement(sql);
-            rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                int recipientId = rs.getInt("recipient_id");
-                String recipientName = rs.getString("recipient_name");
-                String recipientDesc = rs.getString("recipient_email");
-
-                Recipient recipient = new Recipient(recipientId, recipientName, recipientDesc);
-                recipients.add(recipient);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            // リソースをクローズ
-            try {
-                if (rs != null)
-                    rs.close();
-                if (pstmt != null)
-                    pstmt.close();
-                if (conn != null)
-                    conn.close();
+        try (Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    int recipientId = rs.getInt("recipient_id");
+                    String recipientName = rs.getString("recipient_name");
+                    String recipientEmail = rs.getString("recipient_email");
+    
+                    Recipient recipient = new Recipient(recipientId, recipientName, recipientEmail);
+                    recipients.add(recipient);
+                }
             } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+            e.printStackTrace();
+        } 
         return recipients;
     }
 
