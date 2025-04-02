@@ -84,13 +84,13 @@ ul {
     width: 100%;
     margin-top: 4px;
 }
-.project-detail-container dl div {
+.main-container dl div {
     display: flex;
 }
-.project-detail-container dl div:not(:last-child) {
+.main-container dl div:not(:last-child) {
     margin-bottom: 24px;
 }
-.project-detail-container dl dt {
-    width: 80px;
+.main-container dl dt {
+    width: 130px;
 }
 

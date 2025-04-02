@@ -10,7 +10,7 @@
                     <jsp:include page="WEB-INF/jsp/header.jsp" />
                     <div class="inner">
                         <div class="container main-container projects-container">
-                            <h2>案件一覧画面</h2>
+                            <h2>案件一覧</h2>
                             <ul class="projects-list">
                                 <% for(Project project : projectList) { %>
                                     <li class="projects-list-menu"><a href="project-detail?projectId=<%= project.getProjectId() %>">
