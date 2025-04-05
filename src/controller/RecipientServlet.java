@@ -8,26 +8,27 @@ import javax.servlet.annotation.*;
 
 import model.*;
 
-@WebServlet({ "/recipient-register", "/recipients", "/recipient-detail"})
+@WebServlet({ "/recipient-register", "/recipients", "/recipient-detail" })
 
 public class RecipientServlet extends HttpServlet {
-    public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 
+    // Getリクエスト
+    public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         String path = req.getServletPath(); // アクセスされたURLを取得
         if ("/recipient-register".equals(path)) {
             req.getRequestDispatcher("recipient-register.jsp").forward(req, res);
-        } else if("/recipients".equals(path)) {
-            
+        } else if ("/recipients".equals(path)) {
+
             // 以下にrecipientDAOクラスのgetRecipientsメソッドを呼び出し、配信先一覧画面へフォワードする
             RecipientDAO recipientDAO = new RecipientDAO();
             List<Recipient> recipientList = recipientDAO.getRecipients();
             req.setAttribute("recipientList", recipientList);
             req.getRequestDispatcher("recipients.jsp").forward(req, res);
-        } else if("/recipient-detail".equals(path)) {
+        } else if ("/recipient-detail".equals(path)) {
             String recipientIdParam = req.getParameter("recipientId");
 
-            if(recipientIdParam == null || recipientIdParam.isEmpty()) {
-                res.sendRedirect("/recipients"); //IDがない場合は配信先一覧へリダイレクト
+            if (recipientIdParam == null || recipientIdParam.isEmpty()) {
+                res.sendRedirect("/recipients"); // IDがない場合は配信先一覧へリダイレクト
                 return;
             }
             try {
@@ -35,19 +36,20 @@ public class RecipientServlet extends HttpServlet {
                 RecipientDAO recipientDAO = new RecipientDAO();
                 Recipient recipient = recipientDAO.getRecipientById(recipientId);
 
-                if(recipient == null) {
+                if (recipient == null) {
                     res.sendRedirect("/recipients");
                     return;
                 }
 
                 req.setAttribute("recipient", recipient);
                 req.getRequestDispatcher("recipient-detail.jsp").forward(req, res);
-            } catch(NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 res.sendRedirect("recipients");
             }
         }
     }
 
+    // POSTリクエスト
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         req.setCharacterEncoding("UTF-8");
         String recipientName = req.getParameter("recipient-name");
@@ -57,11 +59,13 @@ public class RecipientServlet extends HttpServlet {
 
         // バリデーション
         String recipientNameError = Validator.validateInput(recipientName, "配信先名");
-        String recipientEmailError = Validator.validateInput(recipientEmail, "配信先メールアドレス");
+        String recipientEmailError = Validator.validateInput(recipientEmail, "メールアドレス");
+        String recipientEmailFormatError = Validator.validateEmail(recipientEmail, "メールアドレス");
 
-        if (recipientNameError != null || recipientEmailError != null) {
+        if (recipientNameError != null || recipientEmailError != null || recipientEmailFormatError != null) {
             req.setAttribute("recipientNameError", recipientNameError);
             req.setAttribute("recipientEmailError", recipientEmailError);
+            req.setAttribute("recipientEmailFormatError", recipientEmailFormatError);
             req.getRequestDispatcher("recipient-register.jsp").forward(req, res);
         } else {
             try {
