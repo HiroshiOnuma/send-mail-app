@@ -41,9 +41,19 @@ ul {
     list-style: none;
 }
 
+.form-button {
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
 .header-inner {
     display: flex;
     justify-content: space-between;
+}
+
+.header-inner h1 a {
+text-decoration: none;
+color: #fff;
 }
 
 .main-container {
@@ -84,6 +94,9 @@ ul {
     width: 100%;
     margin-top: 4px;
 }
+.main-container dl {
+    margin-bottom: 32px;
+}
 .main-container dl div {
     display: flex;
 }
@@ -93,4 +106,11 @@ ul {
 .main-container dl dt {
     width: 130px;
 }
+.main-container .form-controller-area {
+    display: flex;
+}
+.main-container .form-controller-area form:first-child {
+    margin-right: 24px;
+}
+
 

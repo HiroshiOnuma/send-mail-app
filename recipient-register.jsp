@@ -29,6 +29,11 @@
                                         <%= request.getAttribute("recipientEmailError") %>
                                     </span>
                                     <% } %>
+                                <% if (isPost && request.getAttribute("recipientEmailFormatError") !=null) { %>
+                                    <span class="err-msg input-error validate-msg">
+                                        <%= request.getAttribute("recipientEmailFormatError") %>
+                                    </span>
+                                    <% } %>
                             </div>
                             <input type="submit" value="配信先登録" class="register-btn recipient-register-btn">
                         </form>

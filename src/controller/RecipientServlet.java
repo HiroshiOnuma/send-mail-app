@@ -57,6 +57,33 @@ public class RecipientServlet extends HttpServlet {
         String recipientEmail = req.getParameter("recipient-email");
         req.setAttribute("recipientEmail", recipientEmail);
 
+        // 削除・編集のリクエストに対してaction属性を切り替えるために使用
+        String action = req.getParameter("action");
+
+        // 削除処理
+        if ("delete".equals(action)) {
+            String recipientIdParam = req.getParameter("recipientId");
+            if (recipientIdParam != null && !recipientIdParam.isEmpty()) {
+                try {
+                    int recipientId = Integer.parseInt(recipientIdParam);
+                    RecipientDAO RecipientDao = new RecipientDAO();
+                    boolean deleted = RecipientDao.deleteRecipientById(recipientId);
+
+                    if (deleted) {
+                        res.sendRedirect("recipients");
+                    } else {
+                        req.setAttribute("error", "配信先削除処理中にエラーが発生しました。");
+                        req.getRequestDispatcher("recipient-detail.jsp").forward(req, res);
+                    }
+                    return;
+                } catch (NumberFormatException e) {
+                    res.sendRedirect("recipients");
+                    e.printStackTrace();
+
+                }
+            }
+        }
+
         // バリデーション
         String recipientNameError = Validator.validateInput(recipientName, "配信先名");
         String recipientEmailError = Validator.validateInput(recipientEmail, "メールアドレス");

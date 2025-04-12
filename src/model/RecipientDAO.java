@@ -99,4 +99,25 @@ public class RecipientDAO extends BaseDAO {
         }
         return recipient;
     }
+
+    /**
+     * 配信先を削除するメソッド
+     * 
+     * @param recipientId 配信先のID
+     * 
+     * @return 削除に成功したら true そうでなければ false
+     * 
+     */
+    public boolean deleteRecipientById(int recipientId) {
+        String sql = "DELETE FROM recipients WHERE recipient_id = ?";
+        try (Connection conn = getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, recipientId);
+            int result = pstmt.executeUpdate();
+            return result > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

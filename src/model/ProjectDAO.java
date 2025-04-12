@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
+/**
  * 案件のCRUD処理(登録・参照・更新・削除)を担当するクラス
  * 
  */
@@ -43,7 +43,7 @@ public class ProjectDAO extends BaseDAO {
         }
     }
 
-    /*
+    /**
      * DBのprojectsテーブルから案件情報を取得するメソッド
      *
      * @return List<Project> 取得した案件情報を格納したProjectオブジェクトのリスト
@@ -72,12 +72,12 @@ public class ProjectDAO extends BaseDAO {
         return projects;
     }
 
-    /*
+    /**
      * DBのprojectsテーブルからidを指定して案件情報を取得するメソッド
      * 
-     * @param int projectId
+     * @param projectId 案件ID
      * 
-     * @return Project
+     * @return Project Projectオブジェクト
      */
     public Project getProjectById(int projectId) {
         String sql = "SELECT project_id, project_name, project_description, created_at FROM projects WHERE project_id = ?";
@@ -99,5 +99,54 @@ public class ProjectDAO extends BaseDAO {
             e.printStackTrace();
         }
         return project;
+    }
+
+    /**
+     * 案件を更新するメソッド
+     * 
+     * @param projectId 案件のID
+     * @param projectName 案件の名前
+     * @param projectDesc 案件概要
+     * 
+     * @return 更新に成功したら true そうでなければ false
+     * 
+     */
+    public boolean updateProjectById(int projectId, String projectName, String projectDesc) {
+        String sql = "UPDATE projects SET project_name = ?, project_description =? WHERE project_id = ?";
+
+        try (Connection conn = getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, projectName);
+            pstmt.setString(2, projectDesc);
+            pstmt.setInt(3, projectId);
+
+            int result = pstmt.executeUpdate();
+
+            return result > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 案件を削除するメソッド
+     * 
+     * @param projectId 案件のID
+     * 
+     * @return 削除に成功したら true そうでなければ false
+     * 
+     */
+    public boolean deleteProjectById(int projectId) {
+        String sql = "DELETE FROM projects WHERE project_id = ?";
+        try (Connection conn = getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, projectId);
+            int result = pstmt.executeUpdate();
+            return result > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

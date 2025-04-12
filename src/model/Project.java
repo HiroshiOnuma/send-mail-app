@@ -10,7 +10,7 @@ public class Project {
     private String projectDescription;
     private Timestamp createdAt;
 
-    // 案件オブジェクトの生成(新規登録用)
+    // 案件オブジェクトの生成(新規登録・更新用)
     public Project(Integer projectId, String projectName, String projectDescription) {
         this.projectId = projectId;
         this.projectName = projectName;

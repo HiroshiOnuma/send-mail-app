@@ -27,6 +27,17 @@
                                 </div>
                             </dl>
                             <% } %>
+                            <div class="form-controller-area">
+                                <form class="edit-form" action="recipient-detail" method="get">
+                                    <input type="hidden" name="recipientId" value="<%= recipient.getRecipientId() %>">
+                                    <button type="submit" class="form-button">編集する</button>
+                                </form>
+                                <form class="delete-form" action="recipient-detail" method="post">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="recipientId" value="<%= recipient.getRecipientId() %>">
+                                    <button type="submit" class="form-button">削除する</button>
+                                </form>
+                            </div>
                     </div>
                 </div>
                 <jsp:include page="WEB-INF/jsp/footer.jsp" />

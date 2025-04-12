@@ -10,7 +10,7 @@
                     <div class="container main-container form-container project-register-container">
                         <h2>案件登録</h2>
 
-                        <form action="project-register" class="project-register-form" method="post">
+                        <form action="project-form" class="data-form project-register-form" method="post">
                             <div class="">
                                 <label for="project-name">案件名: </label>
                                 <input class="input" type="text" name="project-name" id="project-name"
@@ -30,7 +30,7 @@
                                     </span>
                                     <% } %>
                             </div>
-                            <input type="submit" value="案件登録" class="register-btn project-register-btn">
+                            <input type="submit" value="案件登録" class="data-form-btn project-register-btn">
                         </form>
                     </div>
                 </div>

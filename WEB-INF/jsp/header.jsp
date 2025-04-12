@@ -14,11 +14,11 @@
             <body>
                 <header>
                     <div class="container inner header-inner">
-                        <h1>
-                            Send-mail-app
+                        <h1 class="header-title">
+                            <a href="dashboard.jsp">Send-mail-app</a>
                         </h1>
                         <div class="logout">
-                            <form action=""><input type="button" value="ログアウト"></form>
+                            <form action=""><button type="submit" class="form-button">ログアウト</form>
                         </div>
 
                     </div>
