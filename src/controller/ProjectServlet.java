@@ -92,24 +92,7 @@ public class ProjectServlet extends HttpServlet {
         }
 
         // 案件登録処理
-        try {
-            Project project = projectDao.projectInsert(projectName, projectDesc);
-
-            if (project != null) {
-                HttpSession session = req.getSession();
-                session.setAttribute("project", project);
-
-                // ダッシュボードページにリダイレクト（成功した場合）
-                res.sendRedirect("dashboard.jsp");
-            } else {
-                // 案件登録失敗の場合、エラーメッセージを表示し、案件登録画面へ戻る
-                req.setAttribute("projectInsertError", "案件登録に失敗しました。");
-                req.getRequestDispatcher("project-register.jsp").forward(req, res);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            req.setAttribute("error", "案件登録処理中にエラーが発生しました。");
-            req.getRequestDispatcher("project-register.jsp").forward(req, res);
-        }
+        ServletHelper.InsertEntity(req, res, () -> projectDao.projectInsert(projectName, projectDesc), "dashboard.jsp",
+                "project-register.jsp", "案件登録処理中にエラーが発生しました。");
     }
 }

@@ -5,6 +5,10 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import controller.ServletHelper.EntityFetcher;
+import controller.ServletHelper.Operator;
+import model.Project;
+
 public class ServletHelper {
 
     /**
@@ -42,11 +46,26 @@ public class ServletHelper {
         }
     }
 
-    /**
-     * EntityFetcher インターフェース
-     */
-    public interface EntityFetcher<T> {
-        T fetchById(int id);
+    public static <T> void InsertEntity(HttpServletRequest req, HttpServletResponse res, InsertOperator<T> inserter, String redirectPath,
+            String errorForward,
+            String errorMessage) throws ServletException, IOException {
+
+        try {
+            T entity = inserter.insert();
+            if (entity != null) {
+
+                // 対象ページにリダイレクト（成功した場合）
+                res.sendRedirect(redirectPath);
+            } else {
+                req.setAttribute("insertError", errorMessage);
+                req.getRequestDispatcher(errorForward).forward(req, res);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            req.setAttribute("error", errorMessage);
+            req.getRequestDispatcher(errorForward).forward(req, res);
+        }
+
     }
 
     /**
@@ -88,6 +107,20 @@ public class ServletHelper {
             res.sendRedirect(redirectPath);
             return false;
         }
+    }
+
+    /**
+     * EntityFetcher インターフェース
+     */
+    public interface EntityFetcher<T> {
+        T fetchById(int id);
+    }
+
+    /**
+     * InsertOperator インターフェース
+     */
+    public interface InsertOperator<T> {
+        T insert() throws Exception;
     }
 
     /**
