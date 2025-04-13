@@ -1,7 +1,7 @@
 package model;
 import java.sql.Timestamp;
 
-/*
+/**
  * 案件のクラス
  */
 public class Project {

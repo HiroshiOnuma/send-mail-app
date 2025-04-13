@@ -12,7 +12,7 @@ import model.*;
 
 public class ProjectServlet extends HttpServlet {
 
-    // GETリクエスト
+    // GET送信リクエスト
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         String path = req.getServletPath(); // アクセスされたURLを取得
         if ("/project-form".equals(path)) {
@@ -25,54 +25,29 @@ public class ProjectServlet extends HttpServlet {
             req.setAttribute("projectList", projectList);
             req.getRequestDispatcher("projects.jsp").forward(req, res);
 
+            // 個別案件ページへのGETリクエスト
         } else if ("/project-detail".equals(path)) {
-            String projectIdParam = req.getParameter("projectId");
+            Project project = ServletHelper.fetchEntityOrRedirect(req, res, "projectId",
+                    id -> new ProjectDAO().getProjectById(id), "/projects");
 
-            if (projectIdParam == null || projectIdParam.isEmpty()) {
-                res.sendRedirect("/projects"); // IDがない場合は案件一覧へリダイレクト
-                return;
-            }
-            try {
-                int projectId = Integer.parseInt(projectIdParam);
-                ProjectDAO projectDAO = new ProjectDAO();
-                Project project = projectDAO.getProjectById(projectId);
-
-                if (project == null) {
-                    res.sendRedirect("/projects");
-                    return;
-                }
-
+            if (project != null) {
                 req.setAttribute("project", project);
                 req.getRequestDispatcher("project-detail.jsp").forward(req, res);
-            } catch (NumberFormatException e) {
-                res.sendRedirect("projects");
             }
+
+            // 案件編集ページへのGETリクエスト
         } else if ("/project-edit".equals(path)) {
-            String projectIdParam = req.getParameter("projectId");
+            Project project = ServletHelper.fetchEntityOrRedirect(req, res, "projectId",
+                    id -> new ProjectDAO().getProjectById(id), "/projects");
 
-            if (projectIdParam == null || projectIdParam.isEmpty()) {
-                res.sendRedirect("/projects"); // IDがない場合は案件一覧へリダイレクト
-                return;
-            }
-            try {
-                int projectId = Integer.parseInt(projectIdParam);
-                ProjectDAO projectDAO = new ProjectDAO();
-                Project project = projectDAO.getProjectById(projectId);
-
-                if (project == null) {
-                    res.sendRedirect("/projects");
-                    return;
-                }
-
+            if (project != null) {
                 req.setAttribute("project", project);
                 req.getRequestDispatcher("project-edit.jsp").forward(req, res);
-            } catch (NumberFormatException e) {
-                res.sendRedirect("/projects");
             }
         }
     }
 
-    // POSTリクエスト
+    // POST送信リクエスト
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         req.setCharacterEncoding("UTF-8");
         String projectName = req.getParameter("project-name");
@@ -87,26 +62,9 @@ public class ProjectServlet extends HttpServlet {
 
         // 案件削除処理
         if ("delete".equals(action)) {
-            if (projectIdParam == null || projectIdParam.isEmpty()) {
-                res.sendRedirect("projects");
-                return;
-            }
-            int projectId;
-            try {
-                projectId = Integer.parseInt(projectIdParam);
-
-            } catch (NumberFormatException e) {
-                res.sendRedirect("projects");
-                e.printStackTrace();
-                return;
-            }
-            boolean deleted = projectDao.deleteProjectById(projectId);
-            if (deleted) {
-                res.sendRedirect("projects");
-            } else {
-                req.setAttribute("error", "案件削除処理中にエラーが発生しました。");
-                req.getRequestDispatcher("project-detail.jsp").forward(req, res);
-            }
+            ServletHelper.processEntityOperation(req, res, "projectId", "projects",
+                    (int id) -> projectDao.deleteProjectById(id), "projects", "project-detail.jsp",
+                    "案件削除処理中にエラーが発生しました。");
             return;
         }
 
@@ -127,26 +85,9 @@ public class ProjectServlet extends HttpServlet {
 
         // 案件更新処理
         if ("update".equals(action)) {
-            if (projectIdParam == null || projectIdParam.isEmpty()) {
-                res.sendRedirect("projects");
-                return;
-            }
-            int projectId;
-            try {
-                projectId = Integer.parseInt(projectIdParam);
-
-            } catch (NumberFormatException e) {
-                res.sendRedirect("projects");
-                e.printStackTrace();
-                return;
-            }
-            boolean updated = projectDao.updateProjectById(projectId, projectName, projectDesc);
-            if (updated) {
-                res.sendRedirect("projects");
-            } else {
-                req.setAttribute("error", "案件更新処理中にエラーが発生しました。");
-                req.getRequestDispatcher("project-detail.jsp").forward(req, res);
-            }
+            ServletHelper.processEntityOperation(req, res, "projectId", "projects",
+                    (int id) -> projectDao.updateProjectById(id, projectName, projectDesc),
+                    "projects", "project-detail.jsp", "案件更新処理中にエラーが発生しました。");
             return;
         }
 
