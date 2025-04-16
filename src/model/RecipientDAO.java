@@ -3,6 +3,7 @@ package model;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDateTime;
 
 /*
  * 配信先のCRUD処理を担当するクラス
@@ -55,19 +56,19 @@ public class RecipientDAO extends BaseDAO {
         String sql = "SELECT recipient_id, recipient_name, recipient_email FROM recipients";
 
         try (Connection conn = getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            ResultSet rs = pstmt.executeQuery()) {
-                while (rs.next()) {
-                    int recipientId = rs.getInt("recipient_id");
-                    String recipientName = rs.getString("recipient_name");
-                    String recipientEmail = rs.getString("recipient_email");
-    
-                    Recipient recipient = new Recipient(recipientId, recipientName, recipientEmail);
-                    recipients.add(recipient);
-                }
-            } catch (SQLException e) {
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                int recipientId = rs.getInt("recipient_id");
+                String recipientName = rs.getString("recipient_name");
+                String recipientEmail = rs.getString("recipient_email");
+
+                Recipient recipient = new Recipient(recipientId, recipientName, recipientEmail);
+                recipients.add(recipient);
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
-        } 
+        }
         return recipients;
     }
 
@@ -90,14 +91,43 @@ public class RecipientDAO extends BaseDAO {
                     String recipientName = rs.getString("recipient_name");
                     String recipientEmail = rs.getString("recipient_email");
                     Timestamp createdAt = rs.getTimestamp("created_at");
-
-                    recipient = new Recipient(recipientId, recipientName, recipientEmail, createdAt);
+                    LocalDateTime createdAtDateTime = createdAt.toLocalDateTime();
+                    recipient = new Recipient(recipientId, recipientName, recipientEmail, createdAtDateTime);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return recipient;
+    }
+
+    /**
+     * 配信先を更新するメソッド
+     * 
+     * @param recipientId   配信先のID
+     * @param recipientName 配信先の名前
+     * @param recipientEmail 配信先メールアドレス
+     * 
+     * @return 更新に成功したら true そうでなければ false
+     * 
+     */
+
+    public boolean updateRecipientById(int recipientId, String recipientName, String recipientEmail) {
+        String sql = "UPDATE recipients SET recipient_name = ?, recipient_email =? WHERE recipient_id = ?";
+
+        try (Connection conn = getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, recipientName);
+            pstmt.setString(2, recipientEmail);
+            pstmt.setInt(3, recipientId);
+
+            int result = pstmt.executeUpdate();
+
+            return result > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**

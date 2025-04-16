@@ -17,15 +17,15 @@ public class ServletHelper {
      * @param <T>
      * @param req
      * @param res
-     * @param paramName
+     * @param idParam
      * @param fetcher
      * @param redirectPath
      * @return 見つかったエンティティ、または null
      * @throws IOException
      */
-    public static <T> T fetchEntityOrRedirect(HttpServletRequest req, HttpServletResponse res, String paramName,
+    public static <T> T fetchEntityOrRedirect(HttpServletRequest req, HttpServletResponse res, String idParam,
             EntityFetcher<T> fetcher, String redirectPath) throws IOException {
-        String param = req.getParameter(paramName);
+        String param = req.getParameter(idParam);
         if (param == null || param.isEmpty()) {
             res.sendRedirect(redirectPath);
             return null;
@@ -46,6 +46,19 @@ public class ServletHelper {
         }
     }
 
+    /**
+     * リクエストをもとに登録処理を実行し、結果に応じてリダイレクトまたはフォワードする。
+     * 
+     * @param <T>
+     * @param req
+     * @param res
+     * @param inserter
+     * @param redirectPath
+     * @param errorForward
+     * @param errorMessage
+     * @throws ServletException
+     * @throws IOException
+     */
     public static <T> void InsertEntity(HttpServletRequest req, HttpServletResponse res, InsertOperator<T> inserter, String redirectPath,
             String errorForward,
             String errorMessage) throws ServletException, IOException {
@@ -73,7 +86,7 @@ public class ServletHelper {
      * 
      * @param req
      * @param res
-     * @param idParamName
+     * @param idParam
      * @param redirectPath
      * @param operator
      * @param successRedirect
@@ -84,16 +97,16 @@ public class ServletHelper {
      * @throws ServletException
      */
     public static boolean processEntityOperation(HttpServletRequest req, HttpServletResponse res,
-            String idParamName, String redirectPath, Operator operator, String successRedirect, String errorForward,
+            String idParam, String redirectPath, Operator operator, String successRedirect, String errorForward,
             String errorMessage) throws IOException, ServletException {
-        String idParam = req.getParameter(idParamName);
-        if (idParam == null || idParam.isEmpty()) {
+        String param = req.getParameter(idParam);
+        if (param == null || param.isEmpty()) {
             res.sendRedirect(redirectPath);
             return false;
         }
 
         try {
-            int id = Integer.parseInt(idParam);
+            int id = Integer.parseInt(param);
             boolean operated = operator.operate(id);
 
             if (operated) {

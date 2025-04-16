@@ -1,5 +1,6 @@
 package model;
-import java.sql.Timestamp;
+
+import java.time.LocalDateTime;
 
 /**
  * 案件のクラス
@@ -8,7 +9,7 @@ public class Project {
     private Integer projectId;
     private String projectName;
     private String projectDescription;
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
     // 案件オブジェクトの生成(新規登録・更新用)
     public Project(Integer projectId, String projectName, String projectDescription) {
@@ -17,7 +18,7 @@ public class Project {
         this.projectDescription = projectDescription;
     }
     // 案件オブジェクトの生成(データ取得用)
-    public Project(Integer projectId, String projectName, String projectDescription, Timestamp createdAt) {
+    public Project(Integer projectId, String projectName, String projectDescription, LocalDateTime createdAt) {
         this.projectId = projectId;
         this.projectName = projectName;
         this.projectDescription = projectDescription;
@@ -42,7 +43,7 @@ public class Project {
     public String getProjectDescription() {
         return projectDescription;
     }
-    public Timestamp getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 }

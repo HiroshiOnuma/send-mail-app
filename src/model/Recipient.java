@@ -1,15 +1,15 @@
 package model;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /*
  * 配信先のクラス
  */
 public class Recipient {
-    private int recipientId;
+    private Integer recipientId;
     private String recipientName;
     private String recipientEmail;
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
     // コンストラクタ
     public Recipient(Integer recipientId, String recipientName, String recipientEmail) {
@@ -19,7 +19,7 @@ public class Recipient {
     }
 
     // 配信先オブジェクトの生成(データ取得用)
-    public Recipient(Integer recipientId, String recipientName, String recipientEmail, Timestamp createdAt) {
+    public Recipient(Integer recipientId, String recipientName, String recipientEmail, LocalDateTime createdAt) {
         this.recipientId = recipientId;
         this.recipientName = recipientName;
         this.recipientEmail = recipientEmail;
@@ -45,7 +45,7 @@ public class Recipient {
     public String getRecipientEmail() {
         return recipientEmail;
     }
-    public Timestamp getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 }

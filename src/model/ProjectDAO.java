@@ -3,6 +3,7 @@ package model;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDateTime;
 
 /**
  * 案件のCRUD処理(登録・参照・更新・削除)を担当するクラス
@@ -13,18 +14,18 @@ public class ProjectDAO extends BaseDAO {
     /**
      * DBのprojectsテーブルに案件を登録するメソッド
      *
-     * @param projectName        登録する案件の名前（必須）
-     * @param projectDescription 登録する案件の概要（任意）
+     * @param projectName        登録する案件の名前
+     * @param projectDesc 登録する案件の概要
      * @return 登録成功時はProjectオブジェクト、失敗時はnullを返す
      */
-    public Project projectInsert(String projectName, String projectDescription) {
+    public Project projectInsert(String projectName, String projectDesc) {
         String sql = "INSERT INTO projects (project_name, project_description) VALUES (?, ?)";
 
         try (Connection conn = getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) { // 生成されたキーを取得可能にする
 
             pstmt.setString(1, projectName);
-            pstmt.setString(2, projectDescription);
+            pstmt.setString(2, projectDesc);
             int result = pstmt.executeUpdate();
 
             if (result > 0) {
@@ -32,7 +33,7 @@ public class ProjectDAO extends BaseDAO {
                 try (ResultSet rs = pstmt.getGeneratedKeys()) {
                     if (rs.next()) {
                         int projectId = rs.getInt(1);
-                        return new Project(projectId, projectName, projectDescription);
+                        return new Project(projectId, projectName, projectDesc);
                     }
                 }
             }
@@ -91,8 +92,8 @@ public class ProjectDAO extends BaseDAO {
                     String projectName = rs.getString("project_name");
                     String projectDesc = rs.getString("project_description");
                     Timestamp createdAt = rs.getTimestamp("created_at");
-
-                    project = new Project(projectId, projectName, projectDesc, createdAt);
+                    LocalDateTime createdAtDateTime = createdAt.toLocalDateTime();
+                    project = new Project(projectId, projectName, projectDesc, createdAtDateTime);
                 }
             }
         } catch (SQLException e) {
@@ -104,7 +105,7 @@ public class ProjectDAO extends BaseDAO {
     /**
      * 案件を更新するメソッド
      * 
-     * @param projectId 案件のID
+     * @param projectId   案件のID
      * @param projectName 案件の名前
      * @param projectDesc 案件概要
      * 
