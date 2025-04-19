@@ -53,7 +53,7 @@ public class ProjectDAO extends BaseDAO {
      */
     public List<Project> getProjects() {
         List<Project> projects = new ArrayList<>();
-        String sql = "SELECT project_id, project_name, project_description FROM projects";
+        String sql = "SELECT project_id, project_name, project_description FROM projects ORDER BY project_id DESC";
 
         try (Connection conn = getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql);

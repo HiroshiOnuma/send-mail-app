@@ -53,7 +53,7 @@ public class RecipientDAO extends BaseDAO {
      */
     public List<Recipient> getRecipients() {
         List<Recipient> recipients = new ArrayList<>();
-        String sql = "SELECT recipient_id, recipient_name, recipient_email FROM recipients";
+        String sql = "SELECT recipient_id, recipient_name, recipient_email FROM recipients ORDER BY recipient_id DESC";
 
         try (Connection conn = getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql);
