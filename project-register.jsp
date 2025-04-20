@@ -30,7 +30,7 @@
                                     </span>
                                     <% } %>
                             </div>
-                            <input type="submit" value="案件登録" class="data-form-btn project-register-btn">
+                            <button type="submit" value="案件登録" class="form-button data-form-btn project-register-btn">案件登録</button>
                         </form>
                     </div>
                 </div>

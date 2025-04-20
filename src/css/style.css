@@ -42,8 +42,16 @@ ul {
 }
 
 .form-button {
-    padding: 4px 8px;
+    padding: 8px;
     cursor: pointer;
+}
+.delete-btn {
+background-color: #cc0000;
+color: #fff;
+}
+.send-mail-btn {
+    background-color: #583F99;
+    color: #fff;
 }
 
 .header-inner {
@@ -109,7 +117,7 @@ color: #fff;
 .main-container .form-controller-area {
     display: flex;
 }
-.main-container .form-controller-area form:first-child {
+.main-container .form-controller-area form:not(:last-child) {
     margin-right: 24px;
 }
 

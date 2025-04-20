@@ -28,14 +28,18 @@
                             </dl>
                             <% } %>
                             <div class="form-controller-area">
-                                <form class="edit-form" action="recipient-detail" method="get">
+                                <form class="edit-form" action="recipient-mail-setting" method="get">
+                                    <input type="hidden" name="recipientId" value="<%= recipient.getRecipientId() %>">
+                                    <button type="submit" class="form-button">メール画面へ</button>
+                                </form>
+                                <form class="edit-form" action="recipient-edit" method="get">
                                     <input type="hidden" name="recipientId" value="<%= recipient.getRecipientId() %>">
                                     <button type="submit" class="form-button">編集する</button>
                                 </form>
                                 <form class="delete-form" action="recipient-detail" method="post">
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="recipientId" value="<%= recipient.getRecipientId() %>">
-                                    <button type="submit" class="form-button">削除する</button>
+                                    <button type="submit" class="form-button delete-btn">削除する</button>
                                 </form>
                             </div>
                     </div>

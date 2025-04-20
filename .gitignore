@@ -1,4 +1,5 @@
 WEB-INF/lib/
 WEB-INF/classes/
 src/test/
+src/setting/
 .vscode/

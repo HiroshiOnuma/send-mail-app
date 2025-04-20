@@ -41,7 +41,7 @@
                                     <form class="delete-form" action="project-detail" method="post">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="projectId" value="<%= project.getProjectId() %>">
-                                        <button type="submit" class="form-button">削除する</button>
+                                        <button type="submit" class="form-button delete-btn">削除する</button>
                                     </form>
                                 </div>
                     </div>

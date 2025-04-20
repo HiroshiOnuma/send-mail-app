@@ -10,7 +10,7 @@
                     <div class="container main-container form-container recipient-register-container">
                         <h2>配信先登録</h2>
 
-                        <form action="recipient-register" class="recipient-register-form" method="post">
+                        <form action="recipient-form" class="recipient-register-form" method="post">
                             <div class="">
                                 <label for="recipient-name">配信先名: </label>
                                 <input class="input" type="text" name="recipient-name" id="recipient-name"
@@ -35,7 +35,7 @@
                                     </span>
                                     <% } %>
                             </div>
-                            <input type="submit" value="配信先登録" class="register-btn recipient-register-btn">
+                            <button type="submit" value="配信先登録" class="form-button register-btn recipient-register-btn">配信先登録</button>
                         </form>
                     </div>
                 </div>

@@ -26,7 +26,7 @@
                                         rows="10"><%= project.getProjectDescription() %></textarea>
 
                                 </div>
-                                <input type="submit" value="案件更新" class="data-form-btn project-update-btn">
+                                <button type="submit" value="案件更新" class="form-button data-form-btn project-update-btn">案件更新</button>
                             </form>
                             <% } %>
 
