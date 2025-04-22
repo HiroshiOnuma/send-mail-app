@@ -27,9 +27,7 @@
                                 </div>
                                 <div>
                                     <dt>案件概要: </dt>
-                                    <dd>
-                                        <%= project.getProjectDescription() %>
-                                    </dd>
+                                    <dd style="white-space: pre-line;"><%= project.getProjectDescription() %></dd>
                                 </div>
                             </dl>
                             <% } %>

@@ -30,7 +30,7 @@
                             <div class="form-controller-area">
                                 <form class="edit-form" action="recipient-mail-setting" method="get">
                                     <input type="hidden" name="recipientId" value="<%= recipient.getRecipientId() %>">
-                                    <button type="submit" class="form-button">メール画面へ</button>
+                                    <button type="submit" class="form-button">メール設定</button>
                                 </form>
                                 <form class="edit-form" action="recipient-edit" method="get">
                                     <input type="hidden" name="recipientId" value="<%= recipient.getRecipientId() %>">

@@ -8,7 +8,7 @@ import javax.servlet.annotation.*;
 
 import model.*;
 
-@WebServlet({ "/project-form", "/projects", "/project-detail", "/project-edit" })
+@WebServlet({ "/project-form", "/projects", "/project-detail", "/project-edit", "/new" })
 
 public class ProjectServlet extends HttpServlet {
 

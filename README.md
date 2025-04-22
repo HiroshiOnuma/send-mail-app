@@ -7,13 +7,30 @@ MVCモデルに基づいて構成されております。
 
 現在は基本的な構造を実装中であり、今後メール送信処理やバリデーション機能などを追加予定です。
 
+## プロジェクトフォルダ
+
+apache-tomcat-9.0.98/webapps/send-mail-app/
 
 ## 開発環境
-Java version 
 
-Servlet version 
+Java version: 21.0.6
 
-JDBC Driver version 
+Apache Tomcat: 9.0.98
 
-MariaDB version 
+MariaDB version 11.7.2
 
+
+### apache-tomcat-9.0.98/lib/　に配置
+
+JDBC Driver: mariadb-java-client-3.5.2.jar
+
+
+### apache-tomcat-9.0.98/webapps/<ProjectName>/WEB-INF/lib/ に配置
+
+servlet-api.jar
+
+jBCrypt-0.4.3.jar
+
+javax.mail.jar
+
+javax.activation.jar
