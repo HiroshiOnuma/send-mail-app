@@ -20,7 +20,7 @@ Apache Tomcat: 9.0.98
 MariaDB version 11.7.2
 
 
-### apache-tomcat-9.0.98/lib/　に配置
+### apache-tomcat-9.0.98/lib/ に配置
 
 JDBC Driver: mariadb-java-client-3.5.2.jar
 
