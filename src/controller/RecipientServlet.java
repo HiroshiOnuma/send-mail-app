@@ -47,16 +47,18 @@ public class RecipientServlet extends HttpServlet {
 
             // 配信先メール設定ページへのGETリクエスト
         } else if ("/recipient-mail-setting".equals(path)) {
-            
+            String recipientIdParam = req.getParameter("recipientId");
+            int recipientId = Integer.parseInt(recipientIdParam);
+
             // getProjectsメソッド、getRecipientByIdメソッドを呼び出し、メール送信設定画面へフォワードする
             ProjectDAO projectDAO = new ProjectDAO();
             List<Project> projectList = projectDAO.getProjects();
-            req.setAttribute("projectList", projectList);
+            
+            RecipientDAO recipientDao = new RecipientDAO();
+            Recipient recipient = recipientDao.getRecipientById(recipientId);
 
-            Recipient recipient = ServletHelper.fetchEntityOrRedirect(req, res, "recipientId",
-                    id -> new RecipientDAO().getRecipientById(id), "/recipient-mail-setting");
-
-            if (recipient != null) {
+            if (recipient != null && !projectList.isEmpty()) {
+                req.setAttribute("projectList", projectList);
                 req.setAttribute("recipient", recipient);
                 req.getRequestDispatcher("recipient-mail-setting.jsp").forward(req, res);
             }

@@ -120,5 +120,11 @@ color: #fff;
 .main-container .form-controller-area form:not(:last-child) {
     margin-right: 24px;
 }
+.mail-setting-container form label {
+    width: 100px;
+}
+.mail-setting-container select {
+    padding: 4px 8px;
+}
 
 
