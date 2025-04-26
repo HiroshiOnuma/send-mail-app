@@ -55,7 +55,7 @@ public class MailSender {
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient.getRecipientEmail()));
             // 件名の設定
             message.setSubject(
-                    "こんにちは、 " + recipient.getRecipientName() + "さん。\n" + "以下の案件情報を添付しました。\n" + project.getProjectName());
+                    "こんにちは、 " + recipient.getRecipientName() + "さん。 以下の案件情報を添付しました。" + project.getProjectName());
             // 本文の設定
             message.setText("こんにちは、 " + recipient.getRecipientName() + "さん。\n" + "以下の案件情報を送信しました。\n" +  project.getProjectDescription());
 

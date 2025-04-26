@@ -69,14 +69,11 @@ public class RecipientServlet extends HttpServlet {
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         req.setCharacterEncoding("UTF-8");
         String recipientName = req.getParameter("recipient-name");
-        req.setAttribute("recipientName", recipientName);
         String recipientEmail = req.getParameter("recipient-email");
-        req.setAttribute("recipientEmail", recipientEmail);
-        String recipientIdParam = req.getParameter("recipientId");
-
+        RecipientDAO recipientDao = new RecipientDAO();
+        
         // 案件の削除・更新のリクエストに対してaction属性を切り替えるために使用
         String action = req.getParameter("action");
-        RecipientDAO recipientDao = new RecipientDAO();
 
         // 配信先削除処理
         if ("delete".equals(action)) {
@@ -89,7 +86,6 @@ public class RecipientServlet extends HttpServlet {
         // 配信先へメール送信
         if ("recipient-mail-send".equals(action)) {
             ProjectDAO projectDao = new ProjectDAO();
-
             Recipient recipient = new Recipient();
             recipient.setRecipientEmail(recipientEmail);
             recipient.setRecipientName(recipientName);
