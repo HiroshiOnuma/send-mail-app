@@ -99,11 +99,12 @@ public class RecipientServlet extends HttpServlet {
             MailSender mail = new MailSender();
             boolean mailSend = mail.mailSend(recipient, project);
             if (mailSend) {
-                req.setAttribute("sendMessage", "メッセージを送信しました。");
+                // ダッシュボードページにリダイレクト（成功した場合）
+                res.sendRedirect("dashboard.jsp");
             } else {
                 req.setAttribute("sendErrorMessage", "メッセージの送信に失敗しました。");
+                req.getRequestDispatcher("recipient-mail-setting.jsp").forward(req, res);
             }
-            req.getRequestDispatcher("recipient-mail-setting.jsp").forward(req, res);
         }
 
         // バリデーション
