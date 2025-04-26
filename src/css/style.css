@@ -9,7 +9,9 @@
     color: #cc0000;
 
 }
-
+.success-msg {
+    color: #0000CC;
+}
 body {
     width: 100%;
     padding: 0;
@@ -40,10 +42,14 @@ header, footer {
 ul {
     list-style: none;
 }
-
+button {
+    border: none;
+}
 .form-button {
     padding: 8px;
     cursor: pointer;
+    color: #fff;
+    background-color: #0051CC;
 }
 .delete-btn {
 background-color: #cc0000;

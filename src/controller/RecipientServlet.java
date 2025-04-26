@@ -53,7 +53,7 @@ public class RecipientServlet extends HttpServlet {
             // getProjectsメソッド、getRecipientByIdメソッドを呼び出し、メール送信設定画面へフォワードする
             ProjectDAO projectDAO = new ProjectDAO();
             List<Project> projectList = projectDAO.getProjects();
-            
+
             RecipientDAO recipientDao = new RecipientDAO();
             Recipient recipient = recipientDao.getRecipientById(recipientId);
 
@@ -86,6 +86,30 @@ public class RecipientServlet extends HttpServlet {
             return;
         }
 
+        // 配信先へメール送信
+        if ("recipient-mail-send".equals(action)) {
+            ProjectDAO projectDao = new ProjectDAO();
+
+            Recipient recipient = new Recipient();
+            recipient.setRecipientEmail(recipientEmail);
+            recipient.setRecipientName(recipientName);
+
+            String projectIdStr = req.getParameter("projectId");
+            int projectId = Integer.parseInt(projectIdStr);
+
+            // projectIdからDBなどでProjectを取得
+            Project project = projectDao.getProjectById(projectId);
+            
+            MailSender mail = new MailSender();
+            boolean mailSend = mail.mailSend(recipient, project);
+            if (mailSend) {
+                req.setAttribute("sendMessage", "メッセージを送信しました。");
+            } else {
+                req.setAttribute("sendErrorMessage", "メッセージの送信に失敗しました。");
+            }
+            req.getRequestDispatcher("recipient-mail-setting.jsp").forward(req, res);
+        }
+
         // バリデーション
         String recipientNameError = Validator.validateInput(recipientName, "配信先名");
         String recipientEmailError = Validator.validateInput(recipientEmail, "メールアドレス");
@@ -108,7 +132,12 @@ public class RecipientServlet extends HttpServlet {
         }
 
         // 配信先登録処理
-        ServletHelper.InsertEntity(req, res, () -> recipientDao.recipientInsert(recipientName, recipientEmail),
-                "dashboard.jsp", "recipient-register.jsp", "配信先登録処理中にエラーが発生しました。");
+        if ("recipient-form".equals(action)) {
+
+            ServletHelper.InsertEntity(req, res, () -> recipientDao.recipientInsert(recipientName, recipientEmail),
+                    "dashboard.jsp", "recipient-register.jsp", "配信先登録処理中にエラーが発生しました。");
+            return;
+        }
+
     }
 }

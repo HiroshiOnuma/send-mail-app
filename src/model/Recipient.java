@@ -12,6 +12,8 @@ public class Recipient {
     private LocalDateTime createdAt;
 
     // コンストラクタ
+    public Recipient() {}
+    
     public Recipient(Integer recipientId, String recipientName, String recipientEmail) {
         this.recipientId = recipientId;
         this.recipientName = recipientName;
