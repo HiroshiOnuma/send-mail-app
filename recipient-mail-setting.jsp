@@ -13,11 +13,7 @@
                             <div class="inner">
                                 <div class="container main-container form-container mail-setting-container">
                                     <h2>配信先メール設定</h2>
-                                    <% if(request.getAttribute("sendMessage") !=null) { %>
-                                        <p class="success-msg">
-                                            <%= request.getAttribute("sendMessage") %>
-                                        </p>
-                                        <% } %>
+                                   
                                     <% if(request.getAttribute("sendErrorMessage") !=null) { %>
                                         <p class="err-msg">
                                             <%= request.getAttribute("sendErrorMessage") %>
