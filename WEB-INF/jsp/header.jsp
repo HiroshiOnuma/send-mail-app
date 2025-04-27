@@ -18,7 +18,7 @@
                             <a href="dashboard.jsp">Send-mail-app</a>
                         </h1>
                         <div class="logout">
-                            <form action=""><button type="submit" class="form-button">ログアウト</form>
+                            <form action="logout" method="post"><button type="submit" class="form-button">ログアウト</form>
                         </div>
 
                     </div>

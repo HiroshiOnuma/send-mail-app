@@ -57,7 +57,7 @@ public class MailSender {
             message.setSubject(
                     "こんにちは、 " + recipient.getRecipientName() + "さん。 以下の案件情報を添付しました。" + project.getProjectName());
             // 本文の設定
-            message.setText("こんにちは、 " + recipient.getRecipientName() + "さん。\n" + "以下の案件情報を送信しました。\n" +  project.getProjectDescription());
+            message.setText("こんにちは、 " + recipient.getRecipientName() + "さん。\n" + "以下の案件情報を送信しました。\n\n" + "案件名:\n" + project.getProjectName() + "\n\n" + "案件概要:\n" + project.getProjectDescription());
 
             // メールの送信
             Transport.send(message);
